@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Box, Input, Button, List, ListItem, ListIcon, IconButton, Heading } from "@chakra-ui/react";
-import { FaTrash, FaPlus } from "react-icons/fa";
+import { FaTrash, FaPlus, FaEdit } from "react-icons/fa";
 
 const Index = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
+  const [editIndex, setEditIndex] = useState(-1);
+  const [editInput, setEditInput] = useState("");
 
   const handleAddTodo = () => {
     if (input.trim() !== "") {
@@ -20,6 +22,19 @@ const Index = () => {
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
+  };
+
+  const handleEditTodo = (index, todo) => {
+    setEditIndex(index);
+    setEditInput(todo);
+  };
+
+  const handleSaveEdit = (index) => {
+    const updatedTodos = [...todos];
+    updatedTodos[index] = editInput;
+    setTodos(updatedTodos);
+    setEditIndex(-1);
+    setEditInput("");
   };
 
   const handleKeyPress = (event) => {
@@ -38,12 +53,26 @@ const Index = () => {
         </Button>
       </Box>
       <List spacing={3}>
-        {todos.map((todo, index) => (
-          <ListItem key={index} d="flex" alignItems="center" justifyContent="space-between">
-            {todo}
-            <IconButton icon={<FaTrash />} aria-label="Delete task" onClick={() => handleDeleteTodo(index)} colorScheme="red" mr={2} />
-          </ListItem>
-        ))}
+        {todos.map((todo, index) => {
+          if (editIndex === index) {
+            return (
+              <ListItem key={index} d="flex" alignItems="center" justifyContent="space-between">
+                <Input value={editInput} onChange={(e) => setEditInput(e.target.value)} mr={2} />
+                <Button onClick={() => handleSaveEdit(index)} colorScheme="green">
+                  Save
+                </Button>
+                <IconButton icon={<FaTrash />} aria-label="Delete task" onClick={() => handleDeleteTodo(index)} colorScheme="red" mr={2} />
+              </ListItem>
+            );
+          }
+          return (
+            <ListItem key={index} d="flex" alignItems="center" justifyContent="space-between">
+              {todo}
+              <IconButton icon={<FaTrash />} aria-label="Delete task" onClick={() => handleDeleteTodo(index)} colorScheme="red" mr={2} />
+              <IconButton icon={<FaEdit />} aria-label="Edit task" onClick={() => handleEditTodo(index, todo)} colorScheme="blue" />
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
