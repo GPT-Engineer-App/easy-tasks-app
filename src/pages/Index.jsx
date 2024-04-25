@@ -32,7 +32,7 @@ const Index = () => {
     <Box p={5}>
       <Heading mb={4}>Todo App</Heading>
       <Box mb={4}>
-        <Input placeholder="Add a new task" value={input} onChange={handleInputChange} onKeyPress={handleKeyPress} mr={2} />
+        <Input placeholder="Add a new task" value={input} onChange={handleInputChange} onKeyPress={handleKeyPress} mr={2} mb={2} />
         <Button onClick={handleAddTodo} leftIcon={<FaPlus />} colorScheme="blue">
           Add
         </Button>
@@ -41,7 +41,7 @@ const Index = () => {
         {todos.map((todo, index) => (
           <ListItem key={index} d="flex" alignItems="center" justifyContent="space-between">
             {todo}
-            <IconButton icon={<FaTrash />} aria-label="Delete task" onClick={() => handleDeleteTodo(index)} colorScheme="red" />
+            <IconButton icon={<FaTrash />} aria-label="Delete task" onClick={() => handleDeleteTodo(index)} colorScheme="red" mr={2} />
           </ListItem>
         ))}
       </List>
